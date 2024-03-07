@@ -25,16 +25,18 @@ class _MyHomePageState extends State<MyHomePage> {
         flexibleSpace: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Padding(
-              padding:
-                  EdgeInsets.only(left: 90, right: 90, top: 50, bottom: 30),
-              child: Text(
-                'W o r k W i s e',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontFamily: 'adelia',
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                // EdgeInsets.only(left: 90, right: 90, top: 50, bottom: 30),
+                child: Text(
+                  'W o r k W i s e',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontFamily: 'adelia',
+                  ),
                 ),
               ),
             ),
@@ -53,7 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: InputDecoration(
                       hintText: 'Trabajo Pesca, Diseño, Software, etc',
                       hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(0.1), fontSize: 17),
+                          color: Colors.black.withOpacity(0.1),
+                          fontSize: 17,
+                          fontFamily: "ltsaeada-light"),
                       border: InputBorder.none,
                       prefixIcon: const Padding(
                           padding: EdgeInsets.only(top: 3),
@@ -63,7 +67,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Color.fromARGB(134, 33, 191, 253),
                           )),
                     ),
-                    style: const TextStyle(color: Colors.black45),
+                    style: const TextStyle(
+                        color: Colors.black45,
+                        fontFamily: "ltsaeada-light",
+                        fontSize: 17),
                   ),
                 ),
               ),
@@ -71,10 +78,33 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Container(
+                //  width: 200,
+                height: 160,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.01),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Container(
+                //  width: 200,
+                height: 160,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.01),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -83,14 +113,14 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              Icons.home_outlined,
               size: 30,
             ),
             label: "Principal",
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.work,
+              Icons.bookmark_added_outlined,
               size: 30,
               color: Color.fromRGBO(0, 0, 0, 0.2),
             ),
@@ -98,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.person,
+              Icons.person_outline,
               size: 30,
               color: Color.fromRGBO(0, 0, 0, 0.2),
             ),
@@ -106,12 +136,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         selectedLabelStyle: const TextStyle(
-          fontSize: 13,
+          fontSize: 14,
+          fontFamily: ("ltsaeada-light"),
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 13,
-          color: Colors.blue,
-        ),
+        unselectedLabelStyle:
+            const TextStyle(fontSize: 14, fontFamily: "ltsaeada-light"),
         selectedItemColor: const Color.fromARGB(134, 33, 191, 253),
         selectedFontSize: 15,
         unselectedFontSize: 15,

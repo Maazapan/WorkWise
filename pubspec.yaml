@@ -85,6 +85,15 @@ flutter:
      - family: coolvetica
        fonts:
          - asset: fonts/coolvetica.otf
+     - family: ltsaeada-light
+       fonts:
+         - asset: fonts/ltsaeada-Light.otf
+     - family: ltsaeada-medium
+       fonts:
+         - asset: fonts/ltsaeada-Medium.otf
+     - family: ltsaeada-regular
+       fonts:
+         - asset: fonts/ltsaeada-Regular.otf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
