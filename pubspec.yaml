@@ -81,6 +81,10 @@ flutter:
      - family: bubblegum
        fonts:
          - asset: fonts/bubblegum.ttf
+
+     - family: coolvetica
+       fonts:
+         - asset: fonts/coolvetica.otf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
