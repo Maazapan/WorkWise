@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -55,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: InputDecoration(
                       hintText: 'Trabajo Pesca, Diseño, Software, etc',
                       hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withOpacity(0.2),
                           fontSize: 17,
                           fontFamily: "ltsaeada-light"),
                       border: InputBorder.none,
@@ -88,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //  width: 200,
                 height: 160,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.01),
+                  color: Colors.black.withOpacity(0.03),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 //  width: 200,
                 height: 160,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.01),
+                  color: Colors.black.withOpacity(0.03),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -109,22 +108,22 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black.withOpacity(0.01),
+        backgroundColor: Colors.black.withOpacity(0.03),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,
               size: 30,
             ),
-            label: "Principal",
+            label: " ",
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.bookmark_added_outlined,
+              Icons.work_outline,
               size: 30,
               color: Color.fromRGBO(0, 0, 0, 0.2),
             ),
-            label: "Trabajos Guardados",
+            label: " ",
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -132,18 +131,10 @@ class _MyHomePageState extends State<MyHomePage> {
               size: 30,
               color: Color.fromRGBO(0, 0, 0, 0.2),
             ),
-            label: "Cuenta",
+            label: " ",
           ),
         ],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 14,
-          fontFamily: ("ltsaeada-light"),
-        ),
-        unselectedLabelStyle:
-            const TextStyle(fontSize: 14, fontFamily: "ltsaeada-light"),
         selectedItemColor: const Color.fromARGB(134, 33, 191, 253),
-        selectedFontSize: 15,
-        unselectedFontSize: 15,
         elevation: 0.0,
       ),
     );
