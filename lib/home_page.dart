@@ -1,4 +1,22 @@
+import 'package:employments/models/offer.dart';
+import 'package:employments/models/screens/offeritem.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+Future<List<Offer>> fetchOffer() async {
+  final response = await http.get(
+    Uri.parse('http://127.0.0.1:8000/api/offers'),
+  );
+
+  if (response.statusCode == 200) {
+    List jsonResponse = jsonDecode(response.body);
+    return jsonResponse.map((job) => Offer.fromJson(job)).toList();
+  } else {
+    throw Exception('Failed to load offer models');
+  }
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -8,6 +26,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Future<List<Offer>> futureOffer;
+
+  @override
+  void initState() {
+    super.initState();
+    futureOffer = fetchOffer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,12 +85,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           fontFamily: "ltsaeada-light"),
                       border: InputBorder.none,
                       prefixIcon: const Padding(
-                          padding: EdgeInsets.only(top: 3),
-                          child: Icon(
-                            Icons.search,
-                            size: 25,
-                            color: Color.fromARGB(134, 33, 191, 253),
-                          )),
+                        padding: EdgeInsets.only(top: 3),
+                        child: Icon(
+                          Icons.search,
+                          size: 25,
+                          color: Color.fromARGB(134, 33, 191, 253),
+                        ),
+                      ),
                     ),
                     style: const TextStyle(
                         color: Colors.black45,
@@ -78,32 +105,43 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Container(
-                //  width: 200,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.03),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Container(
-                //  width: 200,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.03),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          ],
+        child: FutureBuilder<List<Offer>>(
+          future: futureOffer,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  Offer job = snapshot.data![index];
+
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OfferItem(id: job.id),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                        height: 170,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.black.withOpacity(0.06),
+                        ),
+                        child: Center(child: Text(job.id.toString())),
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
