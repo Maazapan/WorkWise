@@ -1,6 +1,8 @@
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/offeritem.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -8,6 +10,19 @@ import 'package:http/http.dart' as http;
 Future<List<Offer>> fetchOffer() async {
   final response = await http.get(
     Uri.parse('http://127.0.0.1:8000/api/offers'),
+  );
+
+  if (response.statusCode == 200) {
+    List jsonResponse = jsonDecode(response.body);
+    return jsonResponse.map((job) => Offer.fromJson(job)).toList();
+  } else {
+    throw Exception('Failed to load offer models');
+  }
+}
+
+Future<List<Offer>> filterOfferTitle(String title) async {
+  final response = await http.get(
+    Uri.parse('http://127.0.0.1:8000/api/offers/title/$title'),
   );
 
   if (response.statusCode == 200) {
@@ -27,6 +42,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<Offer>> futureOffer;
+  bool search = false;
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -37,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: Colors.black,
+      backgroundColor: Colors.black.withOpacity(0.02),
       appBar: AppBar(
         toolbarHeight: 150,
         backgroundColor: const Color.fromARGB(134, 33, 191, 253),
@@ -53,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
             const Expanded(
               child: Padding(
                 padding: EdgeInsets.all(10),
-                // EdgeInsets.only(left: 90, right: 90, top: 50, bottom: 30),
                 child: Text(
                   'W o r k W i s e',
                   textAlign: TextAlign.center,
@@ -76,7 +92,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding:
                       const EdgeInsets.only(left: 10, right: 33, bottom: 5),
                   child: TextField(
+                    onChanged: (value) => setState(() {
+                      search = true;
+                    }),
                     cursorColor: const Color.fromARGB(134, 33, 191, 253),
+                    controller: searchController,
                     decoration: InputDecoration(
                       hintText: 'Trabajo Pesca, Diseño, Software, etc',
                       hintStyle: TextStyle(
@@ -106,20 +126,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: FutureBuilder<List<Offer>>(
-          future: futureOffer,
+          future: search ? fetchOffer() : futureOffer,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  Offer job = snapshot.data![index];
+                  Offer offer = snapshot.data![index];
 
                   return InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => OfferItem(id: job.id),
+                          builder: (context) => OfferItem(id: offer.id),
                         ),
                       );
                     },
@@ -129,9 +149,74 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 170,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.black.withOpacity(0.06),
+                          color: Colors.white,
                         ),
-                        child: Center(child: Text(job.id.toString())),
+                        child: Center(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 230, top: 10),
+                                child: SizedBox(
+                                  width: 280,
+                                  height: 50,
+                                  child: Text(
+                                    offer.title,
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'ltsaeada-light'),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 230),
+                                child: SizedBox(
+                                  width: 270,
+                                  height: 70,
+                                  child: Text(
+                                    offer.description,
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                        color: Colors.black45,
+                                        fontSize: 15,
+                                        fontFamily: 'ltsaeada-light'),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 190),
+                                child: SizedBox(
+                                  width: 230,
+                                  height: 20,
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Text(
+                                        "Publicado por",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: 12,
+                                            fontFamily: 'ltsaeada-light'),
+                                      ),
+                                      Text(
+                                        " ${offer.companie.name}",
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'ltsaeada-light'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -146,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black.withOpacity(0.03),
+        backgroundColor: Colors.black.withOpacity(0.01),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
