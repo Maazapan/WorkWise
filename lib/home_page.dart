@@ -1,6 +1,6 @@
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/offers/offer_page_item.dart';
-import 'package:employments/models/screens/profile/profile_page.dart';
+
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
