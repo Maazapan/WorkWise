@@ -1,37 +1,11 @@
 import 'package:employments/models/offer.dart';
-import 'package:employments/models/screens/offeritem.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:employments/models/screens/offers/offer_page_item.dart';
+import 'package:employments/models/screens/profile/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
-Future<List<Offer>> fetchOffer() async {
-  final response = await http.get(
-    Uri.parse('http://127.0.0.1:8000/api/offers'),
-  );
-
-  if (response.statusCode == 200) {
-    List jsonResponse = jsonDecode(response.body);
-    return jsonResponse.map((job) => Offer.fromJson(job)).toList();
-  } else {
-    throw Exception('Failed to load offer models');
-  }
-}
-
-Future<List<Offer>> filterOfferTitle(String title) async {
-  final response = await http.get(
-    Uri.parse('http://127.0.0.1:8000/api/offers/title/$title'),
-  );
-
-  if (response.statusCode == 200) {
-    List jsonResponse = jsonDecode(response.body);
-    return jsonResponse.map((job) => Offer.fromJson(job)).toList();
-  } else {
-    throw Exception('Failed to load offer models');
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -42,13 +16,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<Offer>> futureOffer;
-  bool search = false;
   final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    futureOffer = fetchOffer();
+    futureOffer = searchOffers();
   }
 
   @override
@@ -56,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.02),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 150,
         backgroundColor: const Color.fromARGB(134, 33, 191, 253),
         shape: const RoundedRectangleBorder(
@@ -92,13 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding:
                       const EdgeInsets.only(left: 10, right: 33, bottom: 5),
                   child: TextField(
-                    onChanged: (value) => setState(() {
-                      search = true;
-                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        futureOffer = searchOffers();
+                      });
+                    },
                     cursorColor: const Color.fromARGB(134, 33, 191, 253),
                     controller: searchController,
                     decoration: InputDecoration(
-                      hintText: 'Trabajo Pesca, Diseño, Software, etc',
+                      hintText: 'Trabajo Pesca, Diseño, etc',
                       hintStyle: TextStyle(
                           color: Colors.black.withOpacity(0.2),
                           fontSize: 17,
@@ -126,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: FutureBuilder<List<Offer>>(
-          future: search ? fetchOffer() : futureOffer,
+          future: futureOffer,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -135,11 +111,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   Offer offer = snapshot.data![index];
 
                   return InkWell(
+                    hoverColor: Colors.black.withOpacity(0.03),
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => OfferItem(id: offer.id),
+                          builder: (context) => OfferPageItem(offer: offer),
                         ),
                       );
                     },
@@ -151,71 +131,108 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white,
                         ),
-                        child: Center(
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 230, top: 10),
-                                child: SizedBox(
-                                  width: 280,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20, top: 10),
+                              child: Container(
+                                width: 150,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: const Color.fromARGB(134, 33, 191, 253)
+                                      .withOpacity(0.04),
+                                ),
+                                child: Image(
+                                  image: AssetImage(offer.image),
+                                  color:
+                                      const Color.fromARGB(134, 33, 191, 253),
+                                  width: 50,
                                   height: 50,
-                                  child: Text(
-                                    offer.title,
-                                    textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'ltsaeada-light'),
-                                  ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 230),
-                                child: SizedBox(
-                                  width: 270,
-                                  height: 70,
-                                  child: Text(
-                                    offer.description,
-                                    textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                        color: Colors.black45,
-                                        fontSize: 15,
-                                        fontFamily: 'ltsaeada-light'),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 190),
-                                child: SizedBox(
-                                  width: 230,
-                                  height: 20,
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Text(
-                                        "Publicado por",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                            color: Colors.black45,
-                                            fontSize: 12,
-                                            fontFamily: 'ltsaeada-light'),
-                                      ),
-                                      Text(
-                                        " ${offer.companie.name}",
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, top: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 280,
+                                      height: 50,
+                                      child: Text(
+                                        offer.title,
                                         textAlign: TextAlign.left,
                                         style: const TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'ltsaeada-light'),
+                                          color: Colors.black54,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'ltsaeada-light',
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(
+                                      width: 270,
+                                      height: 70,
+                                      child: Text(
+                                        offer.description,
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color: Colors.black45,
+                                          fontSize: 15,
+                                          fontFamily: 'ltsaeada-light',
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 230,
+                                      height: 30,
+                                      child: Row(
+                                        children: <Widget>[
+                                          const Text(
+                                            "Publicado por",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12,
+                                              fontFamily: 'ltsaeada-light',
+                                            ),
+                                          ),
+                                          Text(
+                                            " ${offer.companie.name}",
+                                            textAlign: TextAlign.left,
+                                            style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'ltsaeada-light',
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          IconButton(
+                                              onPressed: () {
+                                                print("Favorito");
+                                              },
+                                              icon: const Padding(
+                                                padding:
+                                                    EdgeInsets.only(bottom: 15),
+                                                child: Icon(
+                                                  Icons.favorite_border,
+                                                  size: 20,
+                                                  color: Colors.black45,
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -259,7 +276,48 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         selectedItemColor: const Color.fromARGB(134, 33, 191, 253),
         elevation: 0.0,
+        onTap: (index) => onTabNavigation(index),
       ),
     );
+  }
+
+  void onTabNavigation(int index) {
+    setState(() {
+      if (index == 1) {
+        /*
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()));
+      */
+      } else if (index == 2) {
+        /*
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ProfilePage(userId: 1),
+          ),
+        );
+        */
+      }
+    });
+  }
+
+  Future<List<Offer>> searchOffers() async {
+    try {
+      String url = searchController.text.isEmpty
+          ? 'http://127.0.0.1:8000/api/offers'
+          : "http://127.0.0.1:8000/api/offers/title/${searchController.text}";
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        List jsonResponse = jsonDecode(response.body);
+
+        return jsonResponse.map((job) => Offer.fromJson(job)).toList();
+      } else {
+        throw Exception('Failed to load offer models');
+      }
+    } catch (e) {
+      return <Offer>[];
+    }
   }
 }
