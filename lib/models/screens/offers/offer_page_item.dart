@@ -1,5 +1,6 @@
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/profile/profile_page.dart';
+
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
 
@@ -29,10 +30,9 @@ class _OfferPageState extends State<OfferPageItem> {
     List<String> requirements = widget.offer.job.requirements.split(",");
 
     return Scaffold(
-      //  backgroundColor: Colors.black.withOpacity(0.02),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(134, 33, 191, 253),
-        toolbarHeight: 370,
+        toolbarHeight: 320,
         automaticallyImplyLeading: false,
         leading: Padding(
           padding: const EdgeInsets.only(bottom: 250),
@@ -79,7 +79,7 @@ class _OfferPageState extends State<OfferPageItem> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 140,
+                    height: 110,
                     width: 400,
                     child: Text(
                       widget.offer.job.description,
@@ -182,7 +182,6 @@ class _OfferPageState extends State<OfferPageItem> {
                       ),
                     ),
                     InkWell(
-                      hoverColor: Colors.black,
                       customBorder: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -220,86 +219,120 @@ class _OfferPageState extends State<OfferPageItem> {
           ],
         ),
       ),
-      body: Center(
-        child: Container(
-          width: 450,
-          height: 400,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.02),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Text(
-                  'Requisitos',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black54,
-                    fontFamily: "ltsaeada-light",
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+      body: Column(
+        children: [
+          Row(
+            children: <Widget>[
               Expanded(
-                child: ListView.builder(
-                  itemCount: requirements.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.03),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          requirements[index],
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16,
-                            fontFamily: "ltsaeada-light",
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Container(
+                    width: 200,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.01),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                            "Requisitos Necesarios",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black54,
+                              fontFamily: "ltsaeada-light",
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: requirements.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                title: Container(
+                                  alignment: Alignment.centerLeft,
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.03),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Icon(
+                                          Icons.check_rounded,
+                                          color: Colors.black54,
+                                          size: 20,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          requirements[index],
+                                          style: const TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 16,
+                                            fontFamily: "ltsaeada-light",
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(134, 33, 191, 253),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 20,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    print("Aplicar al trabajo");
-                  },
-                  child: const Text(
-                    "Aplicar al Trabajo",
-                    style: TextStyle(
-                      fontFamily: "ltsaeada-light",
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                Container(
+                  width: 470,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.01),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 10),
+                    child: TextField(
+                      maxLines: 3,
+                      cursorColor: Colors.black54,
+                      decoration: InputDecoration(
+                        hintText: "Añade un comentario...",
+                        hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.2),
+                          fontSize: 16,
+                          fontFamily: "ltsaeada-light",
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      style: const TextStyle(
+                        color: Colors.black45,
+                        fontFamily: "ltsaeada-light",
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

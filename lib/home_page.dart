@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         futureOffer = searchOffers();
                       });
                     },
-                    cursorColor: const Color.fromARGB(134, 33, 191, 253),
+                    cursorColor: Colors.black54,
                     controller: searchController,
                     decoration: InputDecoration(
                       hintText: 'Trabajo Pesca, Diseño, etc',
