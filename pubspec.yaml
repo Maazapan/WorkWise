@@ -80,12 +80,12 @@ flutter:
     - assets/soporte.png
     - assets/ui.png
     - assets/web.png
-    - assets/profile/profile1.jpg
-    - assets/profile/profile2.jpg
-    - assets/profile/profile3.jpg
-    - assets/profile/profile4.jpg
-    - assets/profile/profile5.jpg
-    - assets/profile/profile6.jpg
+    - assets/profile/profile1.png
+    - assets/profile/profile2.png
+    - assets/profile/profile3.png
+    - assets/profile/profile4.png
+    - assets/profile/profile5.png
+    - assets/profile/profile6.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
