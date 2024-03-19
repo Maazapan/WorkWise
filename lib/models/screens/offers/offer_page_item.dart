@@ -1,14 +1,12 @@
-import 'package:employments/models/comment.dart';
+import 'package:employments/home_page.dart';
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/profile/profile_page.dart';
-import 'package:flutter/services.dart';
-
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:employments/widgets/bottom_navigation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'package:intl/intl.dart' show DateFormat;
+import 'package:flutter/widgets.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class OfferPageItem extends StatefulWidget {
   const OfferPageItem({super.key, required this.offer});
@@ -19,8 +17,6 @@ class OfferPageItem extends StatefulWidget {
 }
 
 class _OfferPageState extends State<OfferPageItem> {
-  late Future<List<Comment>> futureComments = searchComments();
-
   @override
   void initState() {
     super.initState();
@@ -29,269 +25,53 @@ class _OfferPageState extends State<OfferPageItem> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = DateTime.parse(widget.offer.job.date);
-    DateFormat format = DateFormat("EEEE, MMM d, yyyy", 'es');
+    DateTime dateTime = DateTime.parse(widget.offer.createdAt);
+    DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'es');
 
-    String dateFormatted = format.format(date);
-    List<String> requirements = widget.offer.job.requirements.split(",");
+    String date = dateFormat.format(dateTime);
 
     return Scaffold(
+      backgroundColor: const Color(0xFFf8f8f8),
+      extendBody: true,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(134, 33, 191, 253),
-        toolbarHeight: 320,
         automaticallyImplyLeading: false,
-        leading: Padding(
-          padding: const EdgeInsets.only(bottom: 250),
-          child: IconButton(
-            iconSize: 20,
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(60),
-            bottomRight: Radius.circular(60),
-          ),
-        ),
-        flexibleSpace: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: SizedBox(
-                width: 400,
-                height: 80,
-                child: Text(
-                  widget.offer.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontFamily: "ltsaeada-light",
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 1, left: 10, right: 10),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 110,
-                    width: 400,
-                    child: Text(
-                      widget.offer.job.description,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontFamily: "ltsaeada-light",
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(1),
-              child: SizedBox(
-                width: 400,
-                height: 100,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Icon(
-                                  Icons.home_outlined,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(
-                                "Publicado por ${widget.offer.companie.name}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: "ltsaeada-light",
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(
-                                "Direccion ${widget.offer.job.address}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: "ltsaeada-light",
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Icon(
-                                  Icons.phone_outlined,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                              Text(
-                                "Telefono ${widget.offer.companie.phone}",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontFamily: "ltsaeada-light",
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              " Trabajo publicado el $dateFormatted",
-                              style: const TextStyle(
-                                color: Colors.black26,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "ltsaeada-light",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfilePage(
-                              offer: widget.offer,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white.withOpacity(0.3),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            "profile/${widget.offer.user.profilePhoto}",
-                            fit: BoxFit.cover,
-                            scale: 70,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        toolbarHeight: 0,
       ),
       body: Column(
         children: [
           Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: SizedBox(
-                    width: 200,
-                    height: 180,
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 5),
-                          child: Text(
-                            "Requisitos Necesarios",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black54,
-                              fontFamily: "ltsaeada-light",
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: requirements.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Container(
-                                  alignment: Alignment.centerLeft,
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.03),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Icon(
-                                          Icons.check_rounded,
-                                          color: Colors.black54,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
-                                        child: Text(
-                                          requirements[index],
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 16,
-                                            fontFamily: "ltsaeada-light",
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      ],
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 80, left: 10),
+                child: SizedBox(
+                  height: 50,
+                  width: 40,
+                  child: InkWell(
+                    focusColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 80, left: 1),
+                child: SizedBox(
+                  width: 330,
+                  child: Text(
+                    widget.offer.title,
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontFamily: 'ltsaeada-light',
+                      color: Colors.black54,
                     ),
                   ),
                 ),
@@ -299,169 +79,354 @@ class _OfferPageState extends State<OfferPageItem> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 1),
-            child: Container(
-              height: 280,
-              width: 480,
-              child: FutureBuilder<List<Comment>>(
-                future: futureComments,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        Comment comment = snapshot.data![index];
-
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Container(
-                                    width: 400,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.01),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20, top: 10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                width: 60,
-                                                height: 60,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: Colors.black
-                                                      .withOpacity(0.3),
-                                                ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Image.asset(
-                                                    "profile/${comment.user.profilePhoto}",
-                                                    fit: BoxFit.cover,
-                                                    scale: 70,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      comment.user.name,
-                                                      style: const TextStyle(
-                                                        color: Colors.black54,
-                                                        fontSize: 16,
-                                                        fontFamily:
-                                                            "ltsaeada-light",
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      comment.comment,
-                                                      style: const TextStyle(
-                                                        color: Colors.black54,
-                                                        fontSize: 16,
-                                                        fontFamily:
-                                                            "ltsaeada-light",
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 15),
             child: Column(
               children: [
                 Container(
-                  width: 470,
-                  height: 70,
+                  height: 130,
+                  width: 130,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.01),
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.01),
+                        spreadRadius: 1,
+                        blurRadius: 7,
+                        offset: const Offset(-5, 10),
+                      ),
+                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 10),
-                    child: TextField(
-                      maxLines: 3,
-                      inputFormatters: [LengthLimitingTextInputFormatter(80)],
-                      cursorColor: Colors.black54,
-                      decoration: InputDecoration(
-                        hintText: "Añade un comentario...",
-                        hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(0.2),
-                          fontSize: 16,
-                          fontFamily: "ltsaeada-light",
-                        ),
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(
-                        color: Colors.black45,
-                        fontFamily: "ltsaeada-light",
-                        fontSize: 16,
-                      ),
-                    ),
+                  child: Image(
+                    image: AssetImage(widget.offer.image),
                   ),
                 )
               ],
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15, left: 5, right: 5),
+            child: SizedBox(
+              width: 400,
+              child: Container(
+                height: 270,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.01),
+                      spreadRadius: 1,
+                      blurRadius: 7,
+                      offset: const Offset(-5, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 20, left: 20, right: 20),
+                      child: SizedBox(
+                        child: Text(
+                          widget.offer.job.description,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontFamily: "ltsaeada-light",
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20, left: 15),
+                      child: SizedBox(
+                          child: Row(
+                        children: [
+                          Icon(
+                            Icons.push_pin,
+                            color: Colors.black54,
+                            size: 17,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              "Requisitos Necesarios",
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 16,
+                                fontFamily: "ltsaeada-regular",
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 5, left: 20, right: 20),
+                      child: SizedBox(
+                        child: Text(
+                          widget.offer.job.requirements,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontFamily: "ltsaeada-light",
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 20, left: 20, right: 20),
+                      child: SizedBox(
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.calendar_today,
+                              size: 15,
+                              color: Colors.black38,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Publicado el $date",
+                                style: const TextStyle(
+                                  color: Colors.black38,
+                                  fontSize: 13,
+                                  fontFamily: "ltsaeada-light",
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: InkWell(
+                                onTap: () => {
+                                  print(
+                                      "agregar o eliminar oferta de favoritos"),
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black.withOpacity(0.02),
+                                  ),
+                                  child: const Icon(
+                                    Icons.favorite,
+                                    color: Colors.red,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 30, top: 10),
+                  child: Text(
+                    "Informacion",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: "ltsaeada-light",
+                      color: Colors.black45,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                InkWell(
+                  focusColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () {
+                    print("ver comentarios");
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 10, top: 10),
+                        child: Text(
+                          "Ver Comentarios",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'ltsaeada-light',
+                            fontSize: 17,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10, top: 12),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.black45,
+                          size: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: 130,
+                  width: 290,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 30),
+                            child: Icon(
+                              Icons.location_on,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: SizedBox(
+                              width: 230,
+                              child: Text(
+                                widget.offer.job.address,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: 'ltsaeada-light',
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 30, top: 10),
+                            child: Icon(
+                              Icons.attach_money_rounded,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, top: 10),
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(
+                                "${widget.offer.job.salary} USD",
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: 'ltsaeada-light',
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 30, top: 10),
+                            child: Icon(
+                              Icons.phone,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, top: 10),
+                            child: SizedBox(
+                              width: 120,
+                              child: Text(
+                                widget.offer.companie.phone,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: 'ltsaeada-light',
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20, bottom: 20),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.01),
+                          spreadRadius: 1,
+                          blurRadius: 7,
+                          offset: const Offset(-5, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfilePage(offer: widget.offer)),
+                            );
+                          },
+                          child: Image(
+                            image: AssetImage(
+                                "profile/${widget.offer.user.profilePhoto}"),
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
+      bottomNavigationBar: const BottomNavigation(),
     );
-  }
-
-  Future<List<Comment>> searchComments() async {
-    try {
-      String url =
-          "http://127.0.0.1:8000/api/comments/offer/${widget.offer.id}";
-
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        List jsonResponse = jsonDecode(response.body);
-
-        return jsonResponse.map((job) => Comment.fromJson(job)).toList();
-      } else {
-        throw Exception('Failed to load comment models');
-      }
-    } catch (e) {
-      return <Comment>[];
-    }
   }
 }

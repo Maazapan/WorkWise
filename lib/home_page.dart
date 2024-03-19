@@ -1,14 +1,12 @@
-import 'package:employments/models/offer.dart';
-import 'package:employments/widgets/bezier_widget.dart';
-
-import 'package:flutter/cupertino.dart';
+import 'package:employments/models/screens/login/auth_service.dart';
+import 'package:employments/models/screens/offers/favorites/offer_favorite_page.dart';
+import 'package:employments/models/screens/offers/offer_page.dart';
+import 'package:employments/models/screens/offers/offer_recents_list.dart';
+import 'package:employments/models/screens/offers/favorites/offer_favorite_recent_list.dart';
+import 'package:employments/models/user.dart';
+import 'package:employments/widgets/bottom_navigation.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -18,11 +16,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //late Future<List<Offer>> futureOffer = searchOffers();
-
-  late Future<List<Offer>> futureRecentOffers = searchRecentOffers();
-  late Future<List<Offer>> futureOffers = searchOffers();
-
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -32,6 +25,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    User user = AuthService.user!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFf8f8f8),
       appBar: AppBar(
@@ -95,13 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 30, left: 17),
             child: SizedBox(
-              height: 30,
+              height: 35,
               child: Text(
-                "¡Hola Roberto!",
-                style: TextStyle(
+                "¡Hola ${user.name}!",
+                style: const TextStyle(
                   fontFamily: 'ltsaeada-light',
                   fontSize: 28,
                   color: Colors.black54,
@@ -142,6 +137,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             fontSize: 17,
                             fontFamily: 'ltsaeada-light',
                           ),
+                          onSubmitted: (value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      OfferPage(homeSearch: value)),
+                            );
+                          },
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             suffixIcon: Padding(
@@ -160,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 size: 25,
                               ),
                             ),
-                            hintText: "Trabajos, empresas, categorías",
+                            hintText: "Sistemas, redes, diseño grafico",
                             hintStyle: TextStyle(
                               color: Colors.black26,
                               fontFamily: 'ltsaeada-light',
@@ -175,17 +178,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: SizedBox(
-                  height: 350,
+                  height: 40,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(left: 20, top: 10),
                         child: Text(
                           "Mis Favoritos ",
@@ -197,23 +200,54 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                      Spacer(),
-                      Padding(
-                        padding: EdgeInsets.only(right: 20, top: 10),
-                        child: Text(
-                          "Ver todos",
-                          style: TextStyle(
-                            fontFamily: 'ltsaeada-light',
-                            fontSize: 17,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          ),
+                      const Spacer(),
+                      InkWell(
+                        focusColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  OfferFavoritePage(userId: AuthService.userId),
+                            ),
+                          );
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 10, top: 10),
+                              child: Text(
+                                "Ver todos",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'ltsaeada-light',
+                                  fontSize: 17,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 10, top: 12),
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.black45,
+                                size: 18,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 300,
+                child: OfferFavoriteRecentList(userId: AuthService.userId),
               )
             ],
           ),
@@ -234,169 +268,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
+          const Padding(
+            padding: EdgeInsets.only(top: 5),
             child: SizedBox(
               height: 190,
-              child: FutureBuilder<List<Offer>>(
-                future: futureRecentOffers,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        Offer offer = snapshot.data![index];
-
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Container(
-                                height: 150,
-                                width: 300,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(25),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.01),
-                                      spreadRadius: 1,
-                                      blurRadius: 7,
-                                      offset: const Offset(-5, 10),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, left: 20),
-                                            child: SizedBox(
-                                              width: 200,
-                                              child: Text(
-                                                offer.title,
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.black54,
-                                                  fontFamily:
-                                                      "ltsaeada-regular",
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 8, left: 20),
-                                            child: SizedBox(
-                                              height: 60,
-                                              width: 200,
-                                              child: Text(
-                                                offer.description,
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.black38,
-                                                  fontFamily:
-                                                      "ltsaeada-regular",
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 15, top: 40),
-                                      child: Container(
-                                        height: 70,
-                                        width: 70,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 4,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black
-                                                  .withOpacity(0.02),
-                                              spreadRadius: 1,
-                                              blurRadius: 7,
-                                              offset: const Offset(-5, 10),
-                                            ),
-                                          ],
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                              'profile/${offer.user.profilePhoto}',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
+              child: OfferRecentsList(),
             ),
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNavigation(),
     );
-  }
-
-  Future<List<Offer>> searchOffers() async {
-    try {
-      String url = 'http://127.0.0.1:8000/api/offers';
-
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        List jsonResponse = jsonDecode(response.body);
-
-        return jsonResponse.map((job) => Offer.fromJson(job)).toList();
-      } else {
-        throw Exception('Failed to load offer models');
-      }
-    } catch (e) {
-      return <Offer>[];
-    }
-  }
-
-  Future<List<Offer>> searchRecentOffers() async {
-    try {
-      String url = 'http://127.0.0.1:8000/api/offer/recents';
-
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        List jsonResponse = jsonDecode(response.body);
-
-        return jsonResponse.map((job) => Offer.fromJson(job)).toList();
-      } else {
-        throw Exception('Failed to load offer models');
-      }
-    } catch (e) {
-      return <Offer>[];
-    }
   }
 }

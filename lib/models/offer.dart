@@ -10,8 +10,10 @@ class Offer {
   final String image;
   final User user;
   final Job job;
+
   final Categorie categorie;
   final Companie companie;
+  final String createdAt;
 
   const Offer({
     required this.id,
@@ -22,6 +24,7 @@ class Offer {
     required this.job,
     required this.categorie,
     required this.companie,
+    required this.createdAt,
   });
 
   factory Offer.fromJson(Map<String, dynamic> json) {
@@ -30,6 +33,7 @@ class Offer {
       title: json['title'],
       description: json['description'],
       image: json['image'],
+      createdAt: json['created_at'],
       user: User.fromJson(json['user']),
       job: Job.fromJson(json['job']),
       categorie: Categorie.fromJson(json['categorie']),
