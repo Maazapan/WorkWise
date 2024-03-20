@@ -1,16 +1,21 @@
 import 'package:employments/home_page.dart';
 import 'package:employments/models/offer.dart';
+import 'package:employments/models/screens/login/auth_service.dart';
 import 'package:employments/models/screens/profile/profile_page.dart';
 import 'package:employments/widgets/bottom_navigation.dart';
+import 'package:employments/widgets/favorite_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class OfferPageItem extends StatefulWidget {
-  const OfferPageItem({super.key, required this.offer});
+  const OfferPageItem({super.key, required this.offer, required this.saved});
   final Offer offer;
+  final bool saved;
 
   @override
   State<OfferPageItem> createState() => _OfferPageState();
@@ -203,24 +208,9 @@ class _OfferPageState extends State<OfferPageItem> {
                             const Spacer(),
                             Padding(
                               padding: const EdgeInsets.only(right: 5),
-                              child: InkWell(
-                                onTap: () => {
-                                  print(
-                                      "agregar o eliminar oferta de favoritos"),
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black.withOpacity(0.02),
-                                  ),
-                                  child: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
-                                ),
+                              child: FavoriteButton(
+                                offerId: widget.offer.id,
+                                favorite: widget.saved,
                               ),
                             )
                           ],

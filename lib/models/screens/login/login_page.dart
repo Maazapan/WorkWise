@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 270, left: 30, right: 30),
+            padding: const EdgeInsets.only(top: 300, left: 30, right: 30),
             child: Container(
               height: 45,
               decoration: BoxDecoration(
@@ -185,19 +185,22 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: const EdgeInsets.only(top: 30, left: 60, right: 60),
             child: InkWell(
+              focusColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onTap: () {
                 setState(() {
-                  AuthService.login(
-                    context,
-                    emailController.text,
-                    passwordController.text,
-                  );
+                  AuthService.login(context, "john.doe@example.com", "123"
+                      //    emailController.text,
+                      //   passwordController.text,
+                      );
                 });
               },
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [
                     BoxShadow(
@@ -214,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       "Continuar",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black54,
                         fontSize: 18,
                         fontFamily: 'ltsaeada-regular',
                       ),

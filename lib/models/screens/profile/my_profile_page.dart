@@ -1,18 +1,19 @@
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/login/auth_service.dart';
+import 'package:employments/models/user.dart';
 import 'package:employments/widgets/bottom_navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required this.offer});
-  final Offer offer;
+class MyProfilePage extends StatefulWidget {
+  const MyProfilePage({super.key, required this.user});
+  final User? user;
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     super.initState();
@@ -29,34 +30,14 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Column(
         children: [
-          Row(
+          const Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 80, left: 10),
-                child: SizedBox(
-                  height: 50,
-                  width: 40,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.black45,
-                    ),
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 80, left: 1),
+                padding: EdgeInsets.only(top: 80, left: 25),
                 child: SizedBox(
                   width: 330,
                   child: Text(
-                    "Perfiles",
+                    "Mi Perfil",
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 28,
@@ -90,8 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: Image(
-                      image: AssetImage(
-                          "profile/${widget.offer.user.profilePhoto}"),
+                      image: AssetImage("profile/${widget.user!.profilePhoto}"),
                       width: 100,
                       height: 100,
                     ),
@@ -101,12 +81,11 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: SizedBox(
               width: 400,
-              //     color: Colors.yellow,
               child: Text(
-                widget.offer.user.name,
+                widget.user!.name,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 28,
@@ -115,56 +94,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 2),
-                child: Icon(
-                  Icons.work,
-                  color: Colors.black45,
-                  size: 16,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2, left: 5),
-                child: Text(
-                  "Dueño de ${widget.offer.companie.name}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'ltsaeada-light',
-                    color: Colors.black45,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: Icon(
-                  Icons.location_on,
-                  color: Colors.black45,
-                  size: 16,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 5, left: 5),
-                child: Text(
-                  "Direccion ${widget.offer.companie.direction}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'ltsaeada-light',
-                    color: Colors.black45,
-                  ),
-                ),
-              ),
-            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
@@ -188,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         top: 15, left: 25, right: 25, bottom: 15),
                     child: SizedBox(
                       child: Text(
-                        widget.offer.user.bio,
+                        widget.user!.bio,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 17,
@@ -198,7 +127,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  //   Text(AuthService.token),
                 ],
               ),
             ),

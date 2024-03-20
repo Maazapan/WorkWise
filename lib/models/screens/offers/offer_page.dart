@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:employments/models/offer.dart';
+import 'package:employments/models/screens/login/auth_service.dart';
 
 import 'package:employments/models/screens/offers/offer_page_item.dart';
 import 'package:employments/widgets/bottom_navigation.dart';
+import 'package:employments/widgets/favorite_button.dart';
 
 import 'package:flutter/material.dart';
 
@@ -18,7 +22,8 @@ class OfferPage extends StatefulWidget {
 
 class _OfferState extends State<OfferPage> {
   final searchController = TextEditingController();
-  late Future<List<Offer>> futureOffers;
+  late Future<List<Offer>> futureOffers = fetchOffers();
+  late List<int> favorites = [];
 
   @override
   void initState() {
@@ -26,7 +31,8 @@ class _OfferState extends State<OfferPage> {
     if (widget.homeSearch.isNotEmpty) {
       searchController.text = widget.homeSearch;
     }
-    futureOffers = fetchOffers();
+
+    fetchOffersFavorite();
   }
 
   @override
@@ -46,30 +52,10 @@ class _OfferState extends State<OfferPage> {
         ),
         flexibleSpace: Column(
           children: [
-            Row(
+            const Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 90, left: 10),
-                  child: SizedBox(
-                    height: 50,
-                    width: 40,
-                    child: InkWell(
-                      focusColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black45,
-                      ),
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 90, left: 1),
+                  padding: EdgeInsets.only(top: 90, left: 20),
                   child: Text(
                     "Ofertas Disponibles",
                     style: TextStyle(
@@ -210,8 +196,11 @@ class _OfferState extends State<OfferPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  OfferPageItem(offer: offer)),
+                            builder: (context) => OfferPageItem(
+                              offer: offer,
+                              saved: favorites.contains(offer.id),
+                            ),
+                          ),
                         );
                       },
                       child: Padding(
@@ -271,7 +260,7 @@ class _OfferState extends State<OfferPage> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 10),
+                                      padding: const EdgeInsets.only(left: 10),
                                       child: SizedBox(
                                         width: 220,
                                         child: Text(
@@ -335,28 +324,11 @@ class _OfferState extends State<OfferPage> {
                               Row(
                                 children: [
                                   Padding(
-                                    padding:
-                                        EdgeInsets.only(right: 20, top: 90),
-                                    child: InkWell(
-                                      onTap: () => {
-                                        print(
-                                            "agregar o eliminar oferta de favoritos"),
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.black.withOpacity(0.02),
-                                        ),
-                                        child: const Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ),
+                                    padding: const EdgeInsets.only(
+                                        right: 20, top: 90),
+                                    child: FavoriteButton(
+                                        offerId: offer.id,
+                                        favorite: favorites.contains(offer.id)),
                                   )
                                 ],
                               )
@@ -419,9 +391,31 @@ class _OfferState extends State<OfferPage> {
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((offer) => Offer.fromJson(offer)).toList();
+
+      List<Offer> offerList =
+          jsonResponse.map((offer) => Offer.fromJson(offer)).toList();
+
+      return offerList;
     } else {
       throw Exception('Failed to load offers saved from API');
     }
+  }
+
+  void fetchOffersFavorite() async {
+    try {
+      final response = await http.get(Uri.parse(
+          'http://127.0.0.1:8000/api/offers_save/user/${AuthService.userId}'));
+
+      if (response.statusCode == 200) {
+        List jsonResponse = json.decode(response.body);
+
+        setState(() {
+          favorites =
+              jsonResponse.map((offer) => Offer.fromJson(offer).id).toList();
+        });
+      } else {
+        throw Exception('Failed to load offers saved from API');
+      }
+    } catch (e) {}
   }
 }

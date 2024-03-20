@@ -1,5 +1,6 @@
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/offers/offer_page_item.dart';
+import 'package:employments/widgets/favorite_button.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -55,7 +56,9 @@ class _OfferFavoriteRecentState extends State<OfferFavoriteRecentList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => OfferPageItem(offer: offer)),
+                          builder: (context) =>
+                              OfferPageItem(offer: offer, saved: true),
+                        ),
                       );
                     },
                     child: Padding(
@@ -130,25 +133,7 @@ class _OfferFavoriteRecentState extends State<OfferFavoriteRecentList> {
                             Padding(
                               padding:
                                   const EdgeInsets.only(right: 20, top: 35),
-                              child: InkWell(
-                                onTap: () => {
-                                  print(
-                                      "agregar o eliminar oferta de favoritos"),
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black.withOpacity(0.02),
-                                  ),
-                                  child: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
+                              //     child: FavoriteButton(offerId: offer.id),
                             )
                           ],
                         ),
@@ -160,7 +145,7 @@ class _OfferFavoriteRecentState extends State<OfferFavoriteRecentList> {
             },
           );
         } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          return Text("");
         }
         return const Center(
             child: CircularProgressIndicator(
@@ -172,7 +157,7 @@ class _OfferFavoriteRecentState extends State<OfferFavoriteRecentList> {
 
   Future<List<Offer>> fetchOffersSaved() async {
     final response = await http.get(Uri.parse(
-        'http://127.0.0.1:8000/api/offer/saves/user/recent/${widget.userId}'));
+        'http://127.0.0.1:8000/api/offers_save/user/rencent/${widget.userId}'));
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);

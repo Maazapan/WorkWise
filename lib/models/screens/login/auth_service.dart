@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 class AuthService {
   static int userId = 0;
   static User? user;
+  static String token = '';
 
   static Future<void> login(
       BuildContext context, String email, String password) async {
@@ -34,18 +35,19 @@ class AuthService {
 
       if (response.statusCode != 200) {
         LoginPage.status = 'Contraseña Incorrecta';
-
         return;
       }
 
       final profile = responseData['profile'];
       userId = profile['id'];
+      token = responseData['access_token'].toString();
       user = User.fromJson(profile);
 
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MyHomePage()));
     } catch (error) {
-      LoginPage.status = 'Error de conexión';
+      print(error);
+      //LoginPage.status = error.toString();
     }
   }
 }

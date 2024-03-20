@@ -1,5 +1,7 @@
 import 'package:employments/home_page.dart';
+import 'package:employments/models/screens/login/auth_service.dart';
 import 'package:employments/models/screens/offers/offer_page.dart';
+import 'package:employments/models/screens/profile/my_profile_page.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -52,16 +54,24 @@ class _BottomNativationState extends State<BottomNavigation> {
           _selectedIndex = index;
         });
 
-        if (index == 0) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const MyHomePage()));
-        } else if (index == 1) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const OfferPage(homeSearch: "")));
-        } else if (index == 2) {
-          Navigator.pushNamed(context, '/profile');
+        switch (index) {
+          case 0:
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const MyHomePage()));
+            break;
+          case 1:
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const OfferPage(homeSearch: "")));
+            break;
+          case 2:
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MyProfilePage(user: AuthService.user!)));
+            break;
         }
       },
     );

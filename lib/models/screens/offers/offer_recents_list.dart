@@ -50,7 +50,7 @@ class _OfferSavedState extends State<OfferRecentsList> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  OfferPageItem(offer: offer)),
+                                  OfferPageItem(offer: offer, saved: false)),
                         );
                       },
                       child: Container(

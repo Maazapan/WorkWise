@@ -1,5 +1,6 @@
 import 'package:employments/models/offer.dart';
 import 'package:employments/models/screens/offers/offer_page_item.dart';
+import 'package:employments/widgets/favorite_button.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
             itemBuilder: (context, index) {
               Offer offer = snapshot.data![index];
               String description =
-                  offer.job.description.substring(0, 60) + "... ";
+                  offer.job.description.substring(0, 50) + "... ";
 
               DateTime dateTime = DateTime.parse(offer.createdAt);
               DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'es');
@@ -58,7 +59,9 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => OfferPageItem(offer: offer)),
+                          builder: (context) =>
+                              OfferPageItem(offer: offer, saved: true),
+                        ),
                       );
                     },
                     child: Padding(
@@ -168,25 +171,7 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(right: 20, top: 90),
-                                  child: InkWell(
-                                    onTap: () => {
-                                      print(
-                                          "agregar o eliminar oferta de favoritos"),
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 30,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.black.withOpacity(0.02),
-                                      ),
-                                      child: const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ),
+                                  //     child: FavoriteButton(offerId: offer.id),
                                 )
                               ],
                             )
@@ -200,7 +185,33 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
             },
           );
         } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+          return const Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 140),
+                  child: Icon(
+                    Icons.error_outline,
+                    size: 40,
+                    color: Colors.black54,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "No se han encontrado \n ofertas guardadas",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 18,
+                      fontFamily: "ltsaeada-light",
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
         }
         return const Center(
             child: CircularProgressIndicator(
@@ -212,7 +223,7 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
 
   Future<List<Offer>> fetchOffersFavorite() async {
     final response = await http.get(Uri.parse(
-        'http://127.0.0.1:8000/api/offer/saves/user/${widget.userId}'));
+        'http://127.0.0.1:8000/api/offers_save/user/${widget.userId}'));
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
