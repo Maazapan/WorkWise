@@ -1,4 +1,7 @@
+import 'package:employments/models/screens/login/companie_page.dart';
 import 'package:employments/models/screens/login/login_page.dart';
+import 'package:employments/models/screens/login/register_login_page.dart';
+import 'package:employments/models/screens/offers/create/offer_create_page.dart';
 import 'package:employments/models/screens/offers/favorites/offer_favorite_page.dart';
 
 import 'package:employments/models/screens/offers/offer_page.dart';
@@ -17,6 +20,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'WorkWise app',
       home: LoginPage(),
+      //  home: CompaniePage(),
       debugShowCheckedModeBanner: false,
     );
   }

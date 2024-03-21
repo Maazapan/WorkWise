@@ -42,56 +42,82 @@ class _OfferPageState extends State<OfferPageItem> {
         automaticallyImplyLeading: false,
         toolbarHeight: 0,
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 80, left: 10),
-                child: SizedBox(
-                  height: 50,
-                  width: 40,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.black45,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 80, left: 1),
-                child: SizedBox(
-                  width: 330,
-                  child: Text(
-                    widget.offer.title,
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontFamily: 'ltsaeada-light',
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
               children: [
-                Container(
-                  height: 130,
-                  width: 130,
+                Padding(
+                  padding: const EdgeInsets.only(top: 80, left: 10),
+                  child: SizedBox(
+                    height: 50,
+                    width: 40,
+                    child: InkWell(
+                      focusColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.black45,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 80, left: 1),
+                  child: SizedBox(
+                    width: 330,
+                    child: Text(
+                      widget.offer.title,
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontFamily: 'ltsaeada-light',
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Column(
+                children: [
+                  Container(
+                    height: 130,
+                    width: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.01),
+                          spreadRadius: 1,
+                          blurRadius: 7,
+                          offset: const Offset(-5, 10),
+                        ),
+                      ],
+                    ),
+                    child: Image(
+                      image: AssetImage("assets/${widget.offer.image}"),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15, left: 5, right: 5),
+              child: SizedBox(
+                width: 400,
+                child: Container(
+                  height: 270,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(40),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -102,319 +128,260 @@ class _OfferPageState extends State<OfferPageItem> {
                       ),
                     ],
                   ),
-                  child: Image(
-                    image: AssetImage(widget.offer.image),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 15, left: 5, right: 5),
-            child: SizedBox(
-              width: 400,
-              child: Container(
-                height: 270,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.01),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                      offset: const Offset(-5, 10),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        child: Text(
-                          widget.offer.job.description,
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16,
-                            fontFamily: "ltsaeada-light",
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20, left: 15),
-                      child: SizedBox(
-                          child: Row(
-                        children: [
-                          Icon(
-                            Icons.push_pin,
-                            color: Colors.black54,
-                            size: 17,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Requisitos Necesarios",
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 16,
-                                fontFamily: "ltsaeada-regular",
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 5, left: 20, right: 20),
-                      child: SizedBox(
-                        child: Text(
-                          widget.offer.job.requirements,
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16,
-                            fontFamily: "ltsaeada-light",
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 20, left: 20, right: 20),
-                      child: SizedBox(
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.calendar_today,
-                              size: 15,
-                              color: Colors.black38,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "Publicado el $date",
-                                style: const TextStyle(
-                                  color: Colors.black38,
-                                  fontSize: 13,
-                                  fontFamily: "ltsaeada-light",
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 5),
-                              child: FavoriteButton(
-                                offerId: widget.offer.id,
-                                favorite: widget.saved,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 30, top: 10),
-                  child: Text(
-                    "Informacion",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: "ltsaeada-light",
-                      color: Colors.black45,
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                InkWell(
-                  focusColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () {
-                    print("ver comentarios");
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 10, top: 10),
-                        child: Text(
-                          "Ver Comentarios",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'ltsaeada-light',
-                            fontSize: 17,
-                            color: Colors.black45,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 10, top: 12),
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.black45,
-                          size: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: 130,
-                  width: 290,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 30),
-                            child: Icon(
-                              Icons.location_on,
-                              size: 20,
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          child: Text(
+                            widget.offer.job.description,
+                            style: const TextStyle(
                               color: Colors.black54,
+                              fontSize: 16,
+                              fontFamily: "ltsaeada-light",
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: SizedBox(
-                              width: 230,
-                              child: Text(
-                                widget.offer.job.address,
-                                textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontFamily: 'ltsaeada-light',
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 30, top: 10),
-                            child: Icon(
-                              Icons.attach_money_rounded,
-                              size: 20,
+                      const Padding(
+                        padding: EdgeInsets.only(top: 20, left: 15),
+                        child: SizedBox(
+                            child: Row(
+                          children: [
+                            Icon(
+                              Icons.push_pin,
                               color: Colors.black54,
+                              size: 17,
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 10),
-                            child: SizedBox(
-                              width: 150,
+                            Padding(
+                              padding: EdgeInsets.only(left: 10),
                               child: Text(
-                                "${widget.offer.job.salary} USD",
-                                textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontFamily: 'ltsaeada-light',
+                                "Requisitos Necesarios",
+                                style: TextStyle(
                                   color: Colors.black54,
+                                  fontSize: 16,
+                                  fontFamily: "ltsaeada-regular",
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        )),
                       ),
-                      Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 30, top: 10),
-                            child: Icon(
-                              Icons.phone,
-                              size: 20,
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 5, left: 20, right: 20),
+                        child: SizedBox(
+                          child: Text(
+                            widget.offer.job.requirements,
+                            style: const TextStyle(
                               color: Colors.black54,
+                              fontSize: 16,
+                              fontFamily: "ltsaeada-light",
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 10),
-                            child: SizedBox(
-                              width: 120,
-                              child: Text(
-                                widget.offer.companie.phone,
-                                textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontFamily: 'ltsaeada-light',
-                                  color: Colors.black54,
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 20, left: 20, right: 20),
+                        child: SizedBox(
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.calendar_today,
+                                size: 15,
+                                color: Colors.black38,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(
+                                  "Publicado el $date",
+                                  style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontSize: 13,
+                                    fontFamily: "ltsaeada-light",
+                                  ),
                                 ),
                               ),
-                            ),
+                              const Spacer(),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: FavoriteButton(
+                                  offerId: widget.offer.id,
+                                  favorite: widget.saved,
+                                ),
+                              )
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20, bottom: 20),
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.01),
-                          spreadRadius: 1,
-                          blurRadius: 7,
-                          offset: const Offset(-5, 10),
-                        ),
-                      ],
+              ),
+            ),
+            const Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 30, top: 10),
+                    child: Text(
+                      "Informacion",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "ltsaeada-light",
+                        color: Colors.black45,
+                      ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 130,
+                    width: 290,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfilePage(offer: widget.offer)),
-                            );
-                          },
-                          child: Image(
-                            image: AssetImage(
-                                "profile/${widget.offer.user.profilePhoto}"),
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                          ),
+                        Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 30),
+                              child: Icon(
+                                Icons.location_on,
+                                size: 20,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: SizedBox(
+                                width: 230,
+                                child: Text(
+                                  widget.offer.job.address,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: 'ltsaeada-light',
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 30, top: 10),
+                              child: Icon(
+                                Icons.attach_money_rounded,
+                                size: 20,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10, top: 10),
+                              child: SizedBox(
+                                width: 150,
+                                child: Text(
+                                  "${widget.offer.job.salary} USD",
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: 'ltsaeada-light',
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 30, top: 10),
+                              child: Icon(
+                                Icons.phone,
+                                size: 20,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10, top: 10),
+                              child: SizedBox(
+                                width: 120,
+                                child: Text(
+                                  widget.offer.companie.phone,
+                                  textAlign: TextAlign.left,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: 'ltsaeada-light',
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.01),
+                            spreadRadius: 1,
+                            blurRadius: 7,
+                            offset: const Offset(-5, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfilePage(offer: widget.offer)),
+                              );
+                            },
+                            child: Image(
+                              image: AssetImage(
+                                  "assets/profile/${widget.offer.user.profilePhoto}"),
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: const BottomNavigation(),
     );

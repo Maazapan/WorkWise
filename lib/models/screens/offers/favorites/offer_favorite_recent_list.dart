@@ -93,7 +93,8 @@ class _OfferFavoriteRecentState extends State<OfferFavoriteRecentList> {
                                       width: 50,
                                       height: 50,
                                       child: Image(
-                                        image: AssetImage(offer.image),
+                                        image:
+                                            AssetImage("assets/${offer.image}"),
                                       ),
                                     ),
                                   ],

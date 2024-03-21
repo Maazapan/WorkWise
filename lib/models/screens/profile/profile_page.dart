@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: const EdgeInsets.only(top: 12),
                     child: Image(
                       image: AssetImage(
-                          "profile/${widget.offer.user.profilePhoto}"),
+                          "assets/profile/${widget.offer.user.profilePhoto}"),
                       width: 100,
                       height: 100,
                     ),

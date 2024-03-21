@@ -55,7 +55,8 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   }
 
   void _addFavorite() async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/offers_save/create');
+    final url =
+        Uri.parse('https://barrios.terrabyteco.com/api/offers_save/create');
 
     final response = await http.post(
       url,
@@ -75,7 +76,8 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   }
 
   void _removeFavorite() async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/offers_save/delete');
+    final url =
+        Uri.parse('https://barrios.terrabyteco.com/api/offers_save/delete');
 
     final response = await http.post(
       url,

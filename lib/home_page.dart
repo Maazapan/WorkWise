@@ -46,30 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(right: 20, top: 30),
-                  child: Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.01),
-                          spreadRadius: 1,
-                          blurRadius: 7,
-                          offset: const Offset(-5, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.notifications,
-                      color: Colors.black54,
-                      size: 25,
-                    ),
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.only(right: 30, top: 23),
                   child: PopupMenuButton<String>(
                     onSelected: (String choice) {
@@ -81,12 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         );
                       } else if (choice == "2") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                        );
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()));
                       }
                     },
                     elevation: 0,

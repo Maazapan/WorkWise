@@ -40,8 +40,9 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               Offer offer = snapshot.data![index];
-              String description =
-                  offer.job.description.substring(0, 50) + "... ";
+              String description = offer.description.length > 50
+                  ? offer.job.description.substring(0, 50) + "... "
+                  : offer.job.description;
 
               DateTime dateTime = DateTime.parse(offer.createdAt);
               DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'es');
@@ -96,7 +97,8 @@ class _OfferFavoriteState extends State<OfferFavoriteList> {
                                       width: 70,
                                       height: 70,
                                       child: Image(
-                                        image: AssetImage(offer.image),
+                                        image:
+                                            AssetImage("assets/${offer.image}"),
                                       ),
                                     ),
                                   ],

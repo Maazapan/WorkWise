@@ -81,6 +81,8 @@ flutter:
     - assets/soporte.png
     - assets/ui.png
     - assets/web.png
+    - assets/back.png
+    - assets/sistema2.png
     - assets/profile/profile1.png
     - assets/profile/profile2.png
     - assets/profile/profile3.png

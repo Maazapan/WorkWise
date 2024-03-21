@@ -43,7 +43,7 @@ class _OfferState extends State<OfferPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        toolbarHeight: 240,
+        toolbarHeight: 220,
         scrolledUnderElevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -182,8 +182,9 @@ class _OfferState extends State<OfferPage> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 Offer offer = snapshot.data![index];
-                String description =
-                    offer.job.description.substring(0, 50) + "... ";
+                String description = offer.description.length > 50
+                    ? offer.job.description.substring(0, 50) + "... "
+                    : offer.job.description;
 
                 return Column(
                   children: [
@@ -236,7 +237,8 @@ class _OfferState extends State<OfferPage> {
                                         width: 70,
                                         height: 70,
                                         child: Image(
-                                          image: AssetImage(offer.image),
+                                          image: AssetImage(
+                                              "assets/${offer.image}"),
                                         ),
                                       ),
                                     ],

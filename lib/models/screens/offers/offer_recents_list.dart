@@ -33,8 +33,9 @@ class _OfferSavedState extends State<OfferRecentsList> {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               Offer offer = snapshot.data![index];
-              String description =
-                  offer.job.description.substring(0, 60) + "... ";
+              String description = offer.description.length > 50
+                  ? offer.job.description.substring(0, 50) + "... "
+                  : offer.job.description;
 
               return Column(
                 children: [
@@ -134,7 +135,7 @@ class _OfferSavedState extends State<OfferRecentsList> {
                                       },
                                       child: Image(
                                         image: AssetImage(
-                                            "profile/${offer.user.profilePhoto}"),
+                                            "assets/profile/${offer.user.profilePhoto}"),
                                         height: 60,
                                         width: 60,
                                         fit: BoxFit.cover,
@@ -166,20 +167,16 @@ class _OfferSavedState extends State<OfferRecentsList> {
   }
 
   Future<List<Offer>> searchRecentOffers() async {
-    try {
-      String url = 'http://127.0.0.1:8000/api/offer/recents/';
+    String url = 'http://127.0.0.1:8000/api/offer/recents/';
 
-      final response = await http.get(Uri.parse(url));
+    final response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200) {
-        List jsonResponse = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      List jsonResponse = jsonDecode(response.body);
 
-        return jsonResponse.map((job) => Offer.fromJson(job)).toList();
-      } else {
-        throw Exception('Failed to load offer models');
-      }
-    } catch (e) {
-      return <Offer>[];
+      return jsonResponse.map((job) => Offer.fromJson(job)).toList();
+    } else {
+      throw Exception('Failed to load offer models');
     }
   }
 }
